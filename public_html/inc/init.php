@@ -129,6 +129,12 @@ function car_url(array $c): string {
     return BASE . 'car.php?id=' . rawurlencode($c['id']);
 }
 
+/* The reviews section hides itself until there is something real to put
+   in it — an empty "what our customers say" band looks broken. */
+function has_reviews(array $s): bool {
+    return !empty($s['reviews']) || !empty($s['google_rating']);
+}
+
 function stock_available(array $stock): array {
     return array_values(array_filter($stock, fn($c) => empty($c['sold'])));
 }

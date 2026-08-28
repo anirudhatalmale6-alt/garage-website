@@ -52,12 +52,14 @@ site_header($s, 'home');
       </a>
     </div>
 
+    <?php if ($s['google_rating'] || $available || $s['established'] || $s['warranty']): ?>
     <div class="hero-strip">
       <?php if ($s['google_rating']): ?><div>Rated on Google<b class="num"><?= e($s['google_rating']) ?> ★</b></div><?php endif; ?>
-      <div>Cars in stock<b class="num"><?= count($available) ?></b></div>
+      <?php if ($available): ?><div>Cars in stock<b class="num"><?= count($available) ?></b></div><?php endif; ?>
       <?php if ($s['established']): ?><div>Years on site<b class="num"><?= max(1, (int)date('Y') - (int)$s['established']) ?></b></div><?php endif; ?>
       <?php if ($s['warranty']): ?><div>Warranty on repairs<b class="num"><?= e($s['warranty']) ?></b></div><?php endif; ?>
     </div>
+    <?php endif; ?>
   </div>
 </div>
 
@@ -114,11 +116,13 @@ site_header($s, 'home');
         <h2><?= e($s['about_heading']) ?></h2>
         <p class="lede" style="margin-top:20px"><?= e($s['about_1']) ?></p>
         <p class="lede"><?= e($s['about_2']) ?></p>
+        <?php if ($s['serviced_a_year'] || $s['google_rating'] || $s['established']): ?>
         <div class="hero-strip" style="margin-top:34px">
           <?php if ($s['serviced_a_year']): ?><div>Vehicles serviced a year<b class="num"><?= e($s['serviced_a_year']) ?></b></div><?php endif; ?>
           <?php if ($s['google_rating']): ?><div>Google rating<b class="num"><?= e($s['google_rating']) ?> ★</b></div><?php endif; ?>
           <?php if ($s['established']): ?><div>Established<b class="num"><?= e($s['established']) ?></b></div><?php endif; ?>
         </div>
+        <?php endif; ?>
       </div>
       <div class="rv">
         <img src="assets/img/shop-diag.jpg" alt="Technician running diagnostics on a vehicle" style="border:1px solid var(--line);border-radius:3px">
@@ -152,11 +156,13 @@ site_header($s, 'home');
 </div>
 
 <!-- ============ REVIEWS ============ -->
+<?php if (has_reviews($s)): ?>
 <section id="reviews" class="bg-steel">
   <div class="shell">
     <div class="eyebrow">Customer reviews</div>
     <h2 style="margin-bottom:32px">What our customers say</h2>
     <div class="rev-top rv">
+      <?php if (!empty($s['google_rating'])): ?>
       <div class="rev-score">
         <span class="big num"><?= e($s['google_rating']) ?></span>
         <span class="meta">
@@ -165,9 +171,10 @@ site_header($s, 'home');
               <svg viewBox="0 0 24 24"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9L12 2Z"/></svg>
             <?php endfor; ?>
           </span>
-          Based on <?= e($s['google_count']) ?> Google reviews
+          <?= !empty($s['google_count']) ? 'Based on ' . e($s['google_count']) . ' Google reviews' : 'On Google' ?>
         </span>
       </div>
+      <?php endif; ?>
       <?php if (!empty($s['google_url'])): ?>
         <a class="btn btn--ghost" href="<?= e($s['google_url']) ?>" target="_blank" rel="noopener">Read all reviews on Google</a>
       <?php endif; ?>
@@ -186,6 +193,7 @@ site_header($s, 'home');
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ BOOK / CTA BAND ============ -->
 <div class="band" id="book">

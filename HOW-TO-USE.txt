@@ -14,10 +14,10 @@ default, so there is nothing to change.
 1. THE PAGES
 --------------------------------------------------------------------
 
-  yourdomain.co.uk/                 Home
-  yourdomain.co.uk/cars.php         Used cars for sale
-  yourdomain.co.uk/car.php?id=...   One vehicle, with the photo gallery
-  yourdomain.co.uk/admin/           Stock Manager  <-- you only
+  mubautos.co.uk/                 Home
+  mubautos.co.uk/cars.php         Used cars for sale
+  mubautos.co.uk/car.php?id=...   One vehicle, with the photo gallery
+  mubautos.co.uk/admin/           Stock Manager  <-- you only
 
 The Stock Manager is linked in the footer under "Sales". If you would
 rather it was not linked anywhere at all, say the word and I will take
@@ -28,7 +28,7 @@ the link out — the page still works, you just type the address in.
 2. SIGNING IN THE FIRST TIME
 --------------------------------------------------------------------
 
-  Address:   yourdomain.co.uk/admin/
+  Address:   mubautos.co.uk/admin/
   Password:  changeme
 
 CHANGE THAT PASSWORD IMMEDIATELY. Business details -> Password, at
@@ -92,23 +92,41 @@ belt and braces.
 
 
 --------------------------------------------------------------------
-5. THINGS THAT ARE PLACEHOLDERS UNTIL YOU CHANGE THEM
+5. WHAT IS ALREADY YOURS, AND WHAT STILL NEEDS YOU
 --------------------------------------------------------------------
 
-  * Business name "Northgate Autos", the Leeds address, and the phone
-    numbers. The numbers are from the range Ofcom reserves for films
-    and adverts, so no real person gets called by accident — but they
-    are useless to a customer. These are the first thing to change.
-  * The car photos and the two workshop photos are free-licence stock
-    images. Replace them with your own cars as you add stock.
-  * The three reviews are examples. Paste in your own from Google.
+Already set to your details:
 
-  The Google rating, review count and review text are typed in by you
-  rather than pulled live from Google. Google does not hand out review
-  data without a paid API key and a verified Business Profile — I did
-  not want to charge you for something and then have it show an empty
-  box. If you want the genuinely live feed later, tell me and I will
-  price it up honestly.
+  MUB Autos, 128A High Street, Tranent, EH33 1HJ
+  Landline 01875 710 203, mobile 0774 653 3000
+  WhatsApp 0774 653 3000 (stored as 447746533000 so the links work)
+  Open Monday to Saturday, 09:00 to 17:00, closed Sunday
+
+Still needs you:
+
+  * YOUR CARS. The forecourt starts empty on purpose — I was not going
+    to put made-up vehicles with made-up prices on a live website with
+    your phone number on it. Add your first car in the Stock Manager
+    and it is on the site a minute later. Send me photos and details
+    and I will happily put the first few on for you.
+
+  * YOUR LOGO. Until you upload one, the site uses an amber "M" tile
+    with the name beside it. Business details -> Name & logo.
+
+  * YOUR REVIEWS. The reviews section stays hidden until you fill it
+    in, so there is no empty box on the site meanwhile. Paste in your
+    Google rating, the number of reviews and two or three quotes.
+
+  * THE TWO WORKSHOP PHOTOS on the home page are free-licence stock
+    images. Send me photos of your own workshop and I will swap them.
+
+  * THE WORDING in About and the eight service boxes is a sensible
+    starting point, not gospel. Read it and change anything that is
+    not true of your garage — it is all editable.
+
+  On reviews: the rating and the quotes are typed in by you, not
+  pulled live from Google. Google does not give out review data
+  without a paid API key tied to a verified Business Profile.
 
 
 --------------------------------------------------------------------

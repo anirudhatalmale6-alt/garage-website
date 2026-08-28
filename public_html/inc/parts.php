@@ -73,6 +73,8 @@ function site_header(array $s, string $current = ''): void {
         'reviews'  => ['Reviews',       BASE . 'index.php#reviews'],
         'contact'  => ['Contact',       BASE . 'index.php#contact'],
     ];
+    /* no reviews yet? then no link to an anchor that is not on the page */
+    if (!has_reviews($s)) unset($links['reviews']);
     ?>
 <header class="site">
   <div class="shell">

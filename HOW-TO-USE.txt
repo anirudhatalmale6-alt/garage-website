@@ -1,0 +1,132 @@
+====================================================================
+GARAGE + USED CAR SALES WEBSITE — how it all works
+====================================================================
+
+Everything in the "public_html" folder goes into the public_html
+folder of your HostGator account. That is the whole installation —
+there is no database to create and nothing to configure.
+
+The site needs PHP 7.4 or newer. HostGator gives you PHP 8 by
+default, so there is nothing to change.
+
+
+--------------------------------------------------------------------
+1. THE PAGES
+--------------------------------------------------------------------
+
+  yourdomain.co.uk/                 Home
+  yourdomain.co.uk/cars.php         Used cars for sale
+  yourdomain.co.uk/car.php?id=...   One vehicle, with the photo gallery
+  yourdomain.co.uk/admin/           Stock Manager  <-- you only
+
+The Stock Manager is linked in the footer under "Sales". If you would
+rather it was not linked anywhere at all, say the word and I will take
+the link out — the page still works, you just type the address in.
+
+
+--------------------------------------------------------------------
+2. SIGNING IN THE FIRST TIME
+--------------------------------------------------------------------
+
+  Address:   yourdomain.co.uk/admin/
+  Password:  changeme
+
+CHANGE THAT PASSWORD IMMEDIATELY. Business details -> Password, at
+the bottom of the page. Until you do, the Stock Manager shows a red
+warning at the top, because anybody who guessed "changeme" could edit
+your website.
+
+
+--------------------------------------------------------------------
+3. WHAT YOU CAN DO YOURSELF
+--------------------------------------------------------------------
+
+VEHICLES  (Stock Manager -> Vehicles)
+
+  * Add a vehicle       photos, specs, price, your own notes
+  * Mark as SOLD        the red switch. The car greys out on the site
+                        with a SOLD stamp across it, drops off the
+                        home page and stops counting as available.
+                        Leave it there — "have you got another one
+                        like that?" is where a lot of calls come from.
+  * Remove              deletes it from the website for good, and
+                        deletes its photos off the server with it
+  * The star            shows that car on the home page (pick 3)
+  * The arrows          change the order cars appear in
+
+  Photos go straight from your phone. Anything big is automatically
+  shrunk so the page still loads quickly on 4G. Up to 12 per car.
+  The first photo is the one people see in the listings — use "Make
+  main" under any photo to promote it.
+
+BUSINESS DETAILS  (Stock Manager -> Business details)
+
+  Your name, logo, phone, mobile, WhatsApp number, address, opening
+  hours, the words on the home page, your services, and the reviews.
+  Change any of it and it changes everywhere on the site at once.
+
+  Two things worth knowing:
+
+  * The WhatsApp number needs the country code and no spaces.
+    07123 456789  becomes  447123456789
+  * The map and the Get Directions button follow your address. Type
+    the address the way you would type it into Google Maps and both
+    will point at the right place.
+
+
+--------------------------------------------------------------------
+4. WHERE YOUR DATA LIVES
+--------------------------------------------------------------------
+
+  public_html/data/stock.json      your vehicles
+  public_html/data/settings.json   your business details
+  public_html/uploads/             your photos
+
+That is your whole website's content. To back it up, download those
+two folders. To move host, copy the whole public_html across — it
+will come up exactly as you left it.
+
+Nobody can read the data folder over the web; there is an .htaccess
+in there blocking it, and a second rule in the main .htaccess as a
+belt and braces.
+
+
+--------------------------------------------------------------------
+5. THINGS THAT ARE PLACEHOLDERS UNTIL YOU CHANGE THEM
+--------------------------------------------------------------------
+
+  * Business name "Northgate Autos", the Leeds address, and the phone
+    numbers. The numbers are from the range Ofcom reserves for films
+    and adverts, so no real person gets called by accident — but they
+    are useless to a customer. These are the first thing to change.
+  * The car photos and the two workshop photos are free-licence stock
+    images. Replace them with your own cars as you add stock.
+  * The three reviews are examples. Paste in your own from Google.
+
+  The Google rating, review count and review text are typed in by you
+  rather than pulled live from Google. Google does not hand out review
+  data without a paid API key and a verified Business Profile — I did
+  not want to charge you for something and then have it show an empty
+  box. If you want the genuinely live feed later, tell me and I will
+  price it up honestly.
+
+
+--------------------------------------------------------------------
+6. IF SOMETHING GOES WRONG
+--------------------------------------------------------------------
+
+  "The Stock Manager says it cannot save"
+        The data and uploads folders need to be writable. In cPanel's
+        File Manager set both to permissions 755. If HostGator is
+        fussy, 775 will do it.
+
+  "I have forgotten the password"
+        Message me. It is a one-line change to the settings file and
+        takes a minute.
+
+  "A photo will not upload"
+        It is either not a JPG/PNG/WEBP, or it is bigger than the
+        upload limit on your hosting (usually 8 MB or 64 MB). Photos
+        straight from a phone are well under that.
+
+Any question at all, message me on Freelancer and I will sort it.

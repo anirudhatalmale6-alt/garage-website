@@ -41,8 +41,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'details
         'about_heading', 'about_1', 'about_2', 'footer_blurb',
         'serviced_a_year', 'warranty',
         'google_rating', 'google_count', 'google_url',
+        'break_from', 'break_to', 'closed_dates',
+        'booking_email', 'email_from', 'booking_services', 'booking_note',
     ] as $k) {
         if (isset($_POST[$k])) $s[$k] = trim($_POST[$k]);
+    }
+
+    /* ---- booking numbers ---- */
+    $s['booking_enabled'] = !empty($_POST['booking_enabled']);
+    $s['slot_minutes']    = max(15, min(240, (int)($_POST['slot_minutes']  ?? 60)));
+    $s['slot_capacity']   = max(1,  min(20,  (int)($_POST['slot_capacity'] ?? 2)));
+    $s['lead_hours']      = max(0,  min(168, (int)($_POST['lead_hours']    ?? 2)));
+    $s['days_ahead']      = max(1,  min(365, (int)($_POST['days_ahead']    ?? 42)));
+
+    foreach (['booking_email' => 'The email address for new bookings does not look right.',
+              'email_from'    => 'The "sent from" email address does not look right.'] as $k => $msg) {
+        if ($s[$k] !== '' && !filter_var($s[$k], FILTER_VALIDATE_EMAIL)) $errors[] = $msg;
+    }
+    if ($s['booking_enabled'] && $s['booking_email'] === '') {
+        $errors[] = 'Put in an email address for new bookings, otherwise nobody gets told when one comes in.';
+    }
+    foreach (['break_from' => 'break starts', 'break_to' => 'break ends'] as $k => $what) {
+        if ($s[$k] !== '' && hhmm_to_mins($s[$k]) === null) {
+            $errors[] = 'The time the ' . $what . ' should look like 13:00.';
+        }
     }
 
     /* opening hours */
@@ -208,6 +230,43 @@ admin_start($s, 'Business details', 'settings');
               <label class="fld"><span>Description</span><input name="svc_text[<?= $i ?>]" value="<?= e($svc['text']) ?>"></label>
             </div>
           <?php endforeach; ?>
+        </div>
+      </div>
+
+      <div class="panel" id="booking">
+        <div class="panel-head">
+          <h3>Online booking</h3>
+          <span class="hint">Free slots come from your opening hours above</span>
+        </div>
+        <div class="panel-body">
+          <label class="check big"><input type="checkbox" name="booking_enabled" <?= booking_enabled($s) ? 'checked' : '' ?>>
+            <span>Let customers book online</span></label>
+          <p class="hint" style="margin:6px 0 22px">Untick this and the booking page turns into a "give us a ring" page, and the Book Online link disappears from the menu.</p>
+
+          <div class="grid-4">
+            <label class="fld"><span>Email new bookings to</span><input name="booking_email" value="<?= e($s['booking_email']) ?>" placeholder="you@yourdomain.co.uk"></label>
+            <label class="fld"><span>Sent from</span><input name="email_from" value="<?= e($s['email_from']) ?>" placeholder="bookings@yourdomain.co.uk"></label>
+            <label class="fld"><span>Slot length (minutes)</span><input name="slot_minutes" value="<?= e($s['slot_minutes']) ?>" inputmode="numeric"></label>
+            <label class="fld"><span>Cars per slot</span><input name="slot_capacity" value="<?= e($s['slot_capacity']) ?>" inputmode="numeric"></label>
+
+            <label class="fld"><span>Least notice (hours)</span><input name="lead_hours" value="<?= e($s['lead_hours']) ?>" inputmode="numeric"></label>
+            <label class="fld"><span>Book up to (days ahead)</span><input name="days_ahead" value="<?= e($s['days_ahead']) ?>" inputmode="numeric"></label>
+            <label class="fld"><span>Lunch break from</span><input name="break_from" value="<?= e($s['break_from']) ?>" placeholder="13:00"></label>
+            <label class="fld"><span>…until</span><input name="break_to" value="<?= e($s['break_to']) ?>" placeholder="13:30"></label>
+          </div>
+          <p class="hint" style="margin:10px 0 22px">"Cars per slot" is how many jobs you can start at the same time — set it to how many ramps you can fill. Leave the lunch boxes empty if you do not want a break blocked out.</p>
+
+          <div class="grid-2">
+            <label class="fld"><span>What people can book (one per line)</span>
+              <textarea name="booking_services" rows="9"><?= e($s['booking_services']) ?></textarea></label>
+            <div>
+              <label class="fld"><span>Days you are closed (one date per line, as 2026-12-25)</span>
+                <textarea name="closed_dates" rows="4" placeholder="2026-12-25&#10;2026-12-26"><?= e($s['closed_dates']) ?></textarea></label>
+              <label class="fld" style="margin-top:18px"><span>Line under the booking heading</span>
+                <textarea name="booking_note" rows="3"><?= e($s['booking_note']) ?></textarea></label>
+            </div>
+          </div>
+          <p class="hint">Bank holidays and your own days off go in the closed-dates box — those days show as Closed on the calendar and nobody can book them.</p>
         </div>
       </div>
 

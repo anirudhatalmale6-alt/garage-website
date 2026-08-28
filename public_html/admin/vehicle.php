@@ -21,6 +21,20 @@ $car = $isNew ? [
 
 $errors = [];
 
+/* How many photos one vehicle may carry. */
+const MAX_PHOTOS = 30;
+
+/* ---------------------------------------------------------------
+   A POST bigger than post_max_size arrives with $_POST and $_FILES
+   completely empty — PHP throws the lot away and says nothing. The
+   page would look like it simply ignored the click, so catch it.
+--------------------------------------------------------------- */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$_POST && !$_FILES) {
+    $sent = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
+    $errors[] = 'Those photos came to ' . round($sent / 1048576) . ' MB, which is more than the server accepts in one go. '
+              . 'Nothing was saved. Add them in two or three smaller batches instead.';
+}
+
 /* ---------------------------------------------------------------
    Photo upload. Shrinks anything huge coming off a phone camera —
    a 4 MB photo straight from an iPhone makes the page crawl on 4G.
@@ -90,6 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['photo_action'] ?? '') !== 
         } elseif ($_POST['photo_action'] === 'main') {
             array_splice($car['photos'], $pos, 1);
             array_unshift($car['photos'], $p);
+        } elseif ($_POST['photo_action'] === 'back' && $pos > 0) {
+            [$car['photos'][$pos - 1], $car['photos'][$pos]] = [$car['photos'][$pos], $car['photos'][$pos - 1]];
+        } elseif ($_POST['photo_action'] === 'fwd' && $pos < count($car['photos']) - 1) {
+            [$car['photos'][$pos + 1], $car['photos'][$pos]] = [$car['photos'][$pos], $car['photos'][$pos + 1]];
         }
         if (!$isNew) { $STOCK[$idx] = $car; store_write('stock', $STOCK); }
     }
@@ -134,7 +152,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['save'] ?? '') !== '') {
         if ($files && is_array($files['name'])) {
             $count = count($files['name']);
             for ($i = 0; $i < $count; $i++) {
-                if (count($car['photos']) >= 12) break;         // 12 is plenty for one car
+                if (count($car['photos']) >= MAX_PHOTOS) {
+                    $errors[] = 'This car already has ' . MAX_PHOTOS . ' photos — delete one before adding another.';
+                    break;
+                }
                 $one = [
                     'name' => $files['name'][$i], 'type' => $files['type'][$i],
                     'tmp_name' => $files['tmp_name'][$i], 'error' => $files['error'][$i],
@@ -149,6 +170,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['save'] ?? '') !== '') {
 
         if ($isNew) $STOCK[] = $car; else $STOCK[$idx] = $car;
         store_write('stock', $STOCK);
+
+        /* The car is saved either way. If a photo would not go on, say so
+           on the car's own page rather than swallowing it on the way out. */
+        if ($errors) {
+            flash_set('bad', car_title($car) . ' was saved, but: ' . implode(' ', $errors));
+            header('Location: vehicle.php?id=' . rawurlencode($car['id']));
+            exit;
+        }
 
         flash_set('ok', car_title($car) . ' saved — it is on the website now.');
         header('Location: index.php');
@@ -171,6 +200,7 @@ $FUELS   = ['Petrol', 'Diesel', 'Hybrid', 'Electric', 'Petrol Plug-in Hybrid'];
 
 <section>
   <div class="shell admin-wrap">
+    <?php flash_out(); ?>
     <?php if ($errors): ?>
       <div class="flash bad"><?= implode('<br>', array_map('e', $errors)) ?></div>
     <?php endif; ?>
@@ -233,7 +263,9 @@ $FUELS   = ['Petrol', 'Diesel', 'Hybrid', 'Electric', 'Petrol Plug-in Hybrid'];
             <span>Add photos (you can pick several at once)</span>
             <input type="file" name="photos[]" accept="image/*" multiple>
           </label>
-          <p class="hint">Straight off your phone is fine — big photos get resized automatically so the page still loads quickly.</p>
+          <p class="hint">Straight off your phone is fine — big photos get resized automatically so the page still loads quickly.
+             Up to <?= MAX_PHOTOS ?> photos per car<?= empty($car['photos']) ? '' : ' (' . count($car['photos']) . ' on so far)' ?>.
+             If you are adding a lot at once, do them in batches of about ten — quicker, and it will not time out on a slow connection.</p>
         </div>
       </div>
 
@@ -253,6 +285,19 @@ $FUELS   = ['Petrol', 'Diesel', 'Hybrid', 'Electric', 'Petrol Plug-in Hybrid'];
                 <img src="<?= e(BASE . $p) ?>" alt="">
                 <?php if ($i === 0): ?><span class="tag">Main</span><?php endif; ?>
                 <figcaption>
+                  <?php
+                    $moves = [];
+                    if ($i > 0) $moves['back'] = ['←', 'Move earlier'];
+                    if ($i < count($car['photos']) - 1) $moves['fwd'] = ['→', 'Move later'];
+                    foreach ($moves as $act => [$sym, $tip]):
+                  ?>
+                  <form method="post" class="inline">
+                    <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="photo" value="<?= e($p) ?>">
+                    <input type="hidden" name="photo_action" value="<?= $act ?>">
+                    <button class="btn btn--ghost btn--sm" type="submit" title="<?= $tip ?>"><?= $sym ?></button>
+                  </form>
+                  <?php endforeach; ?>
                   <?php if ($i > 0): ?>
                   <form method="post" class="inline">
                     <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">

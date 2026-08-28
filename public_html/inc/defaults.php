@@ -53,6 +53,22 @@ function default_settings(): array {
 
         'reviews' => [],
 
+        /* ---------- online booking ----------
+           Slots are built from the opening hours above, so there is no
+           second timetable to keep in step. */
+        'booking_enabled'  => true,
+        'slot_minutes'     => 60,     // length of one slot
+        'slot_capacity'    => 2,      // cars you can take in the same slot
+        'lead_hours'       => 2,      // no bookings inside the next 2 hours
+        'days_ahead'       => 42,     // how far ahead the calendar runs
+        'break_from'       => '',     // optional lunch break, e.g. 13:00
+        'break_to'         => '',     //                          e.g. 13:30
+        'closed_dates'     => '',     // one-off closures, one date per line
+        'booking_email'    => 'mubautos@yahoo.com',   // where new bookings are emailed
+        'email_from'       => '',     // blank = noreply@yourdomain
+        'booking_services' => "Service & oil change\nMOT\nGeneral repair\nDiagnostics — warning light on\nBrakes\nClutch\nTyres\nBattery\nSomething else",
+        'booking_note'     => 'Pick a day and a time that suits you. We will confirm by phone or text if anything needs changing.',
+
         'services' => [
             ['title' => 'General Car Repairs',            'text' => 'Suspension, exhausts, steering, cooling, electrics — diagnosed properly and fixed once.'],
             ['title' => 'Engine Service & Replacement',   'text' => 'From timing belts and head gaskets to full engine and gearbox replacement.'],

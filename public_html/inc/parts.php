@@ -38,7 +38,7 @@ function page_head(array $s, string $title, string $desc = ''): void {
 <meta property="og:title" content="<?= e($title) ?>">
 <meta property="og:description" content="<?= e($desc) ?>">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="<?= BASE ?>assets/css/style.css?v=3">
+<link rel="stylesheet" href="<?= BASE ?>assets/css/style.css?v=4">
 </head>
 <body>
 <div class="hazard"></div>
@@ -69,12 +69,14 @@ function site_header(array $s, string $current = ''): void {
         'home'     => ['Home',          BASE . 'index.php'],
         'services' => ['Services',      BASE . 'index.php#services'],
         'cars'     => ['Cars for Sale', BASE . 'cars.php'],
+        'book'     => ['Book Online',   BASE . 'book.php'],
         'about'    => ['About',         BASE . 'index.php#about'],
         'reviews'  => ['Reviews',       BASE . 'index.php#reviews'],
         'contact'  => ['Contact',       BASE . 'index.php#contact'],
     ];
     /* no reviews yet? then no link to an anchor that is not on the page */
     if (!has_reviews($s)) unset($links['reviews']);
+    if (!booking_enabled($s)) unset($links['book']);
     ?>
 <header class="site">
   <div class="shell">
@@ -110,6 +112,7 @@ function site_footer(array $s): void {
           <li><a href="<?= BASE ?>index.php#services">Engine &amp; clutch</a></li>
           <li><a href="<?= BASE ?>index.php#services">Brakes &amp; tyres</a></li>
           <li><a href="<?= BASE ?>index.php#services">Diagnostics</a></li>
+          <?php if (booking_enabled($s)): ?><li><a href="<?= BASE ?>book.php">Book a service</a></li><?php endif; ?>
         </ul>
       </div>
       <div>
@@ -138,7 +141,7 @@ function site_footer(array $s): void {
 
 <a class="wa-float" href="<?= e(wa_link($s)) ?>" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><?= svg_whatsapp() ?></a>
 
-<script src="<?= BASE ?>assets/js/site.js?v=3"></script>
+<script src="<?= BASE ?>assets/js/site.js?v=4"></script>
 </body>
 </html>
 <?php

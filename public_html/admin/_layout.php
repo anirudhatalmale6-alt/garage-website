@@ -21,6 +21,13 @@ function admin_start(array $s, string $title, string $current = ''): void {
     <nav class="main" id="nav">
       <a href="index.php"<?= $current === 'stock' ? ' aria-current="page"' : '' ?>>Vehicles</a>
       <a href="vehicle.php"<?= $current === 'vehicle' ? ' aria-current="page"' : '' ?>>Add a vehicle</a>
+      <a href="bookings.php"<?= $current === 'bookings' ? ' aria-current="page"' : '' ?>>Bookings<?php
+        $n = 0; $t = date('Y-m-d');
+        foreach (bookings_all() as $b) {
+            if (($b['date'] ?? '') >= $t && ($b['status'] ?? 'new') === 'new') $n++;
+        }
+        if ($n) echo ' <span class="nav-badge">' . $n . '</span>';
+      ?></a>
       <a href="settings.php"<?= $current === 'settings' ? ' aria-current="page"' : '' ?>>Business details</a>
     </nav>
     <div class="head-cta">
@@ -41,7 +48,7 @@ function admin_end(): void {
     </div>
   </div>
 </footer>
-<script src="<?= BASE ?>assets/js/site.js?v=3"></script>
+<script src="<?= BASE ?>assets/js/site.js?v=4"></script>
 </body>
 </html>
 <?php

@@ -1,8 +1,19 @@
 Options -Indexes
 DirectoryIndex index.php index.html
 
+# A URL that is not a real file should be a proper 404. Without this the
+# rewrite the old WordPress left behind quietly answers every wrong address
+# with the home page, which Google reads as hundreds of duplicate pages.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ - [R=404,L]
+</IfModule>
+ErrorDocument 404 /404.php
+
 # never serve the raw data files, whatever the folder .htaccess says
-<FilesMatch "\.(json|lock|tmp)$">
+<FilesMatch "(\.(json|lock|tmp)$|^\.user\.ini$)">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>

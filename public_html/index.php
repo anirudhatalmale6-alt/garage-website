@@ -42,7 +42,7 @@ site_header($s, 'home');
     <div class="hero-cta">
       <a class="btn" href="<?= e(tel_href($s['phone'])) ?>"><?= svg_phone() ?>Call Now</a>
       <a class="btn btn--wa" href="<?= e(wa_link($s)) ?>" target="_blank" rel="noopener"><?= svg_whatsapp() ?>WhatsApp Chat</a>
-      <a class="btn btn--dark" href="#book">
+      <a class="btn btn--dark" href="<?= booking_enabled($s) ? 'book.php' : '#book' ?>">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Book a Service
       </a>
@@ -72,7 +72,7 @@ site_header($s, 'home');
         <h2>Everything your car needs,<br>under one roof</h2>
         <p class="lede">No job too small. Free written estimate before any work starts, and we will always ring you before spending a penny more than we quoted.</p>
       </div>
-      <a class="btn btn--ghost" href="#book">Book a service</a>
+      <a class="btn btn--ghost" href="<?= booking_enabled($s) ? 'book.php' : '#book' ?>">Book a service</a>
     </div>
 
     <div class="svc-grid rv">
@@ -200,10 +200,18 @@ site_header($s, 'home');
   <div class="shell row">
     <div>
       <h2>Book a service or MOT</h2>
-      <p>Tell us the registration and what it is doing. We will come back with a price and the first free slot — usually the same day.</p>
+      <p><?= booking_enabled($s)
+            ? 'Pick a day and a time that suits you and book it online in under a minute — you will see exactly which slots are free.'
+            : 'Tell us the registration and what it is doing. We will come back with a price and the first free slot — usually the same day.' ?></p>
     </div>
     <div class="hero-cta" style="margin:0">
-      <a class="btn" href="<?= e(tel_href($s['phone'])) ?>">Call <?= e($s['phone']) ?></a>
+      <?php if (booking_enabled($s)): ?>
+        <a class="btn" href="book.php">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Book online
+        </a>
+      <?php endif; ?>
+      <a class="btn<?= booking_enabled($s) ? ' btn--ghost' : '' ?>" href="<?= e(tel_href($s['phone'])) ?>">Call <?= e($s['phone']) ?></a>
       <a class="btn btn--wa" href="<?= e(wa_link($s, 'Hi, I would like to book my car in. Registration: ')) ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
     </div>
   </div>

@@ -41,3 +41,16 @@
   }, { threshold: 0.12 });
   items.forEach(function (i) { io.observe(i); });
 })();
+
+/* ---- booking: highlight the chosen time slot ----
+   CSS :has() already does this on new browsers; this keeps it working
+   on older phones, which is exactly who books a garage from a driveway. */
+(function () {
+  var slots = document.querySelectorAll(".slot input[type=radio]");
+  if (!slots.length) return;
+  function paint() {
+    slots.forEach(function (r) { r.closest(".slot").classList.toggle("is-on", r.checked); });
+  }
+  slots.forEach(function (r) { r.addEventListener("change", paint); });
+  paint();
+})();

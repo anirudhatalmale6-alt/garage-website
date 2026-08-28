@@ -17,7 +17,8 @@ default, so there is nothing to change.
   mubautos.co.uk/                 Home
   mubautos.co.uk/cars.php         Used cars for sale
   mubautos.co.uk/car.php?id=...   One vehicle, with the photo gallery
-  mubautos.co.uk/admin/           Stock Manager  <-- you only
+  mubautos.co.uk/book.php         Book a service  <-- customers
+  mubautos.co.uk/admin/           Stock Manager   <-- you only
 
 The Stock Manager is linked in the footer under "Sales". If you would
 rather it was not linked anywhere at all, say the word and I will take
@@ -55,9 +56,59 @@ VEHICLES  (Stock Manager -> Vehicles)
   * The arrows          change the order cars appear in
 
   Photos go straight from your phone. Anything big is automatically
-  shrunk so the page still loads quickly on 4G. Up to 12 per car.
+  shrunk so the page still loads quickly on 4G. Up to 30 per car.
   The first photo is the one people see in the listings — use "Make
-  main" under any photo to promote it.
+  main" under any photo to promote it, or the arrows to shuffle the
+  order of the gallery.
+
+  If you are putting 20 or 30 photos on one car, add them in batches
+  of about ten. It is quicker, and it will not time out halfway
+  through on a slow connection. If a batch is too big for the server
+  to swallow in one go the page now tells you so instead of quietly
+  dropping them.
+
+BOOKINGS  (Stock Manager -> Bookings)
+
+  Every booking made on the website lands in the diary here, grouped
+  by day, newest day first. For each one you get the customer's name,
+  phone, email, what the car is, what they want doing and anything
+  they typed in the notes.
+
+  * Confirm    tells you at a glance which ones you have dealt with
+  * Done       for after the job is finished
+  * Cancel     puts the slot back on the website for somebody else
+  * Delete     removes it from the diary for good
+
+  The number in an amber circle next to "Bookings" in the menu is how
+  many are still waiting for you to confirm them.
+
+  IMPORTANT: the diary is the real record, not the email. A booking is
+  written into the diary before any email goes out, so even if the
+  mail server has a bad day the booking is never lost. If an email
+  fails, the page says so at the top in red.
+
+BOOKING SETTINGS  (Stock Manager -> Business details -> Online booking)
+
+  * Let customers book online   untick it and the booking page turns
+                                into a "give us a ring" page and the
+                                Book Online link leaves the menu
+  * Email new bookings to       set to mubautos@yahoo.com. Change it
+                                to wherever you actually read email.
+  * Slot length                 60 minutes to start with
+  * Cars per slot               how many jobs you can start at once —
+                                set it to how many ramps you can fill.
+                                Set at 2.
+  * Least notice                nobody can book inside the next 2
+                                hours, so you are never ambushed
+  * Book up to                  the calendar runs 42 days ahead
+  * Lunch break                 leave blank for none
+  * What people can book        the list in the dropdown, one per line
+  * Days you are closed         bank holidays and your own days off,
+                                one date per line as 2026-12-25
+
+  The free slots on the calendar come straight out of your opening
+  hours. Change your hours and the booking calendar changes with them
+  — there is no second timetable to keep in step.
 
 BUSINESS DETAILS  (Stock Manager -> Business details)
 
@@ -80,6 +131,7 @@ BUSINESS DETAILS  (Stock Manager -> Business details)
 
   public_html/data/stock.json      your vehicles
   public_html/data/settings.json   your business details
+  public_html/data/bookings.json   your booking diary
   public_html/uploads/             your photos
 
 That is your whole website's content. To back it up, download those
@@ -143,8 +195,17 @@ Still needs you:
         takes a minute.
 
   "A photo will not upload"
-        It is either not a JPG/PNG/WEBP, or it is bigger than the
-        upload limit on your hosting (usually 8 MB or 64 MB). Photos
-        straight from a phone are well under that.
+        It is either not a JPG/PNG/WEBP, or the whole batch was too
+        big for the server to take in one go. There is a .user.ini
+        file in public_html that raises the limits to 40 files and
+        220 MB a batch. If HostGator ignores it, just add the photos
+        ten at a time — it works out the same.
+
+  "A booking email did not arrive"
+        Check the spam folder first. If it is genuinely not arriving,
+        message me: the site sends from noreply@mubautos.co.uk using
+        the hosting's own mail server, and sometimes that needs an SPF
+        record adding at the DNS end. The bookings themselves are
+        never affected — they are all in the diary either way.
 
 Any question at all, message me on Freelancer and I will sort it.

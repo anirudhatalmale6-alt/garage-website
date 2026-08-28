@@ -16,6 +16,7 @@ mb_internal_encoding('UTF-8');
 
 require_once __DIR__ . '/store.php';
 require_once __DIR__ . '/defaults.php';
+require_once __DIR__ . '/booking.php';
 
 /* ---------- first run: create the data files ---------- */
 if (!is_dir(DATA_DIR))   @mkdir(DATA_DIR, 0755, true);
@@ -28,6 +29,9 @@ if (!is_file(store_path('settings'))) {
 }
 if (!is_file(store_path('stock'))) {
     store_write('stock', default_stock());
+}
+if (!is_file(store_path('bookings'))) {
+    store_write('bookings', []);
 }
 
 /* ---------- load ---------- */
@@ -59,6 +63,16 @@ function wa_link(array $s, string $text = ''): string {
     $url = 'https://wa.me/' . $num;
     if ($text !== '') $url .= '?text=' . rawurlencode($text);
     return $url;
+}
+
+/* wa.me only accepts full international numbers. A customer types
+   07746 533000; WhatsApp needs 447746533000 or the link goes nowhere. */
+function intl_uk(string $num): string {
+    $d = preg_replace('/[^0-9]/', '', $num);
+    if (str_starts_with($d, '00')) return substr($d, 2);
+    if (str_starts_with($d, '44')) return $d;
+    if (str_starts_with($d, '0'))  return '44' . ltrim($d, '0');
+    return $d;
 }
 
 function full_address(array $s): string {
